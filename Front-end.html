@@ -1,0 +1,142 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>Books Library</title>
+</head>
+<body>
+    <header id="header">
+        <h3>Welcome to the largest book library </h3>
+        <p>you can choose what you want to read from a various library of old and new books</p>
+    </header>
+    <hr>
+    <main>
+        <h4>Select your favourite category </h4>
+        <div id="cat">
+            
+          <button class="shown" >Novels</button>
+          <button class="shown">Stories</button>
+          <button class="shown">Short stories</button>
+          <button class="shown">Books</button>
+          <button class="hid" id="Education">Education</button>
+          <button class="hid" id="horror">horror</button>
+          <button class="hid" id="Romance">Romance</button>
+          <button class="hid" id="Fantasy">Fantasy</button>
+          <button class="hid" id="Fairy">Fairy tale</button>
+          <button class="hid" id="for Children">for Children</button>
+        </div>
+        <div id="output"></div>
+        <br>
+        <form  >
+            <label>Search</label>
+            <input  id = 'In' type="search" placeholder="type what u want to search for" value="">
+            <input id = 'Su'  class="btn waves-effect waves-light" type="submit" value="search">
+        </form>
+    </main>
+
+    <script>
+        $('.hid').hide();
+        $('.shown').on('click' , function(){
+            $('.shown').hide(1000)
+            $('.hid').fadeIn(3000)
+        })
+        $('.hid').on('click' , function(){
+            $('.hid').hide();
+            $(this).show();
+            $(this).animate({
+                width: 750,
+                opacity: 0.5,
+            })
+
+        });
+    </script>
+    <script>
+      let btnIn1 = document.getElementById('Education')
+      let btnIn2 = document.getElementById('horror')
+      let btnIn3 = document.getElementById('Romance')
+      let btnIn4 = document.getElementById('Fantasy')
+      let btnIn5 = document.getElementById('Fairy')
+      let btnIn6 = document.getElementById('for Children')
+      let input = document.getElementById('In')
+      let sub = document.getElementById('Su')
+      let search = ''
+      let out = document.getElementById('output')
+
+     function getbooks(){
+      var http = new XMLHttpRequest();
+      http.open('GET',`https://www.googleapis.com/books/v1/volumes?q=${search}`);
+      http.responseType = 'json'
+      http.send();
+      http.onreadystatechange = function() {
+         if (http.readyState === 4 && http.status === 200) {
+         console.log('Server response :' + http.response.items[1].volumeInfo.imageLinks) 
+         let m = http.response.items  ;
+         for ( let i = 1 ; i <6 ; i++){
+             out.innerHTML+= `<div>
+                        <img src=${m[i].volumeInfo.imageLinks.thumbnail} ></img>
+                        <h4> book title:${m[i].volumeInfo.title}</h3>
+                        <h4> author : ${m[i].volumeInfo.authors}</h4>
+                        <p> book describtion :${m[i].volumeInfo.description} </p> 
+                        <h4> publidhed date : ${m[i].volumeInfo.publishedDate}</h4>
+                        <a href=${m[i].volumeInfo.previewLink}> book preview </a>
+                        </div>`                  
+       }
+        }
+    }
+}; 
+
+      btnIn1.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn1.innerHTML;
+       getbooks()                 
+       })
+
+       btnIn2.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn2.innerHTML;
+       getbooks()                 
+       })
+
+       btnIn3.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn3.innerHTML;
+       getbooks()                 
+       })
+
+       btnIn4.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn4.innerHTML;
+       getbooks()                 
+       })
+
+       btnIn5.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn5.innerHTML;
+       getbooks()                 
+       })
+
+       btnIn6.addEventListener('click',function(e){
+       e.preventDefault();
+       search = btnIn6.innerHTML;
+       getbooks()                 
+       })
+        
+       input.addEventListener('change',function(e){
+        e.preventDefault();
+        search = e.target.value;                 
+       })
+       Su.addEventListener('click',function(e){
+       e.preventDefault();
+       getbooks()                 
+       })
+
+
+    </script>
+</body>
+</html>
